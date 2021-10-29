@@ -34,10 +34,11 @@ class MyGame extends Phaser.Scene
         level.setCollisionByExclusion(-1, true);
         
         this.player = this.physics.add.sprite(50, 0, 'player');
+        this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, level);
         this.cameras.main.setBounds(0, 0, world.widthInPixels, world.heightInPixels);
         this.cameras.main.startFollow(this.player, true);
-        this.cameras.main.setZoom(2);
+        this.cameras.main.setZoom(1.8);
 
         this.nav = this.physics.add.sprite(500, 300, 'nav');
         this.nav.setImmovable(true);
@@ -61,20 +62,21 @@ class MyGame extends Phaser.Scene
         this.physics.add.collider(this.player, this.nre);
 
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.physics.world.setBounds(0, 0, 7168, 400);
     }
 
     update() {
         if(this.cursors.left.isDown) {
             this.player.setVelocityX(-200);
+            this.player.setFlipX(true);
             if(this.player.body.onFloor()) {
-                this.player.setFlipX(true);
                 this.player.play('walk', true);
             }
 
         } else if(this.cursors.right.isDown) {
             this.player.setVelocityX(200);
+            this.player.setFlipX(false);
             if(this.player.body.onFloor()) {
-                this.player.setFlipX(false);
                 this.player.play('walk', true);
             }
 
