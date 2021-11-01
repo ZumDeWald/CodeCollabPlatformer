@@ -86,7 +86,7 @@ class MyGame extends Phaser.Scene
 
         // Animations
         this.anims.create({key: 'idle', frames: [{key: 'player', frame: 'player_0'}], frameRate: 10});
-        this.anims.create({key: 'jump', frames: [{key: 'player', frame: 'player_5'}], frameRate: 10});
+        this.anims.create({key: 'jump', frames: [{key: 'player', frame: 'player_4'}], frameRate: 10});
         this.anims.create({key: 'walk', frames: this.anims.generateFrameNames('player', {prefix: 'player_', start: 1, end: 3 }), frameRate: 10, repeat: -1});
 
         this.anims.create({key: 'navHit', frames: [{key: 'nav', frame: 'nav_6'}], frameRate: 6});
