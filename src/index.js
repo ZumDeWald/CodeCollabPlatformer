@@ -7,7 +7,11 @@ import Nav from "./assets/nav.png";
 import NavAtlas from "./assets/nav.json";
 import Nre from "./assets/nre.png";
 import NreAtlas from "./assets/nre.json";
+import Circuit from "./assets/circuit.png";
 import DeepNav from "./assets/DeepNav.mp3";
+
+let scoreText = "";
+let score = 0;
 
 const splatEnemyTop = (player, enemy, hit) => {
   if (enemy.body.touching.up === true) {
@@ -31,6 +35,13 @@ const splatEnemyRight = (player, enemy, hit) => {
   }
 };
 
+const getCircuit = (player, circuit) => {
+  circuit.disableBody(true, true);
+
+  score += 10;
+  scoreText.setText("Score: " + score);
+};
+
 class MyGame extends Phaser.Scene {
   constructor() {
     super();
@@ -42,6 +53,7 @@ class MyGame extends Phaser.Scene {
     this.load.atlas("player", Player, PlayerAtlas);
     this.load.atlas("nav", Nav, NavAtlas);
     this.load.atlas("nre", Nre, NreAtlas);
+    this.load.image("circuit", Circuit);
     this.load.audio("deepNav", DeepNav);
   }
 
@@ -90,6 +102,17 @@ class MyGame extends Phaser.Scene {
     this.nre2.setFlipX(true);
     this.physics.add.collider(this.nre2, level);
     this.nre2.dead = false;
+
+    // Getables
+    scoreText = this.add.text(250, 12, "Score: 0", {
+      fontSize: "12px",
+      fill: "#000",
+    });
+
+    this.circuit = this.physics.add.image(40, 300, "circuit");
+    this.circuit.setImmovable(true);
+    this.physics.add.collider(this.circuit, level);
+    this.physics.add.overlap(this.player, this.circuit, getCircuit, null, this);
 
     // Animations
     this.anims.create({
