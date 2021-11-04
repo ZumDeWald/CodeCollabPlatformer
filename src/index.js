@@ -7,6 +7,7 @@ import Nav from "./assets/nav.png";
 import NavAtlas from "./assets/nav.json";
 import Nre from "./assets/nre.png";
 import NreAtlas from "./assets/nre.json";
+import DeepNav from "./assets/DeepNav.mp3";
 
 const splatEnemyTop = (player, enemy, hit) => {
   if (enemy.body.touching.up === true) {
@@ -41,7 +42,7 @@ class MyGame extends Phaser.Scene {
     this.load.atlas("player", Player, PlayerAtlas);
     this.load.atlas("nav", Nav, NavAtlas);
     this.load.atlas("nre", Nre, NreAtlas);
-    this.load.audio("deepNav", ["src/assets/DeepNav.mp3"]);
+    this.load.audio("deepNav", DeepNav);
   }
 
   create() {
@@ -57,7 +58,7 @@ class MyGame extends Phaser.Scene {
     level.setCollisionByExclusion(-1, true);
 
     const level1Track = this.sound.add("deepNav");
-    level1Track.volume -= 0.6;
+    level1Track.volume = 0.5;
     level1Track.play();
 
     // Characters
