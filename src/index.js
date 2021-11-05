@@ -10,8 +10,16 @@ import NreAtlas from "./assets/nre.json";
 import Circuit from "./assets/circuit.png";
 import DeepNav from "./assets/DeepNav.mp3";
 
-let scoreText = "";
+const scoreBox = document.getElementById("score-box");
 let score = 0;
+
+const upScore = (increase) => {
+  score += increase;
+  scoreBox.innerText = `Score: ${score}`;
+};
+
+const canvas = document.getElementsByName("canvas");
+canvas.style = "position: absolute; top: 0; left: 0;";
 
 const splatEnemyTop = (player, enemy, hit) => {
   if (enemy.body.touching.up === true) {
@@ -20,6 +28,7 @@ const splatEnemyTop = (player, enemy, hit) => {
     enemy.play(hit, false);
     setTimeout(() => {
       enemy.disableBody(true, true);
+      upScore(80);
     }, 120);
   }
 };
@@ -27,19 +36,18 @@ const splatEnemyTop = (player, enemy, hit) => {
 const splatEnemyRight = (player, enemy, hit) => {
   if (enemy.body.touching.right === true) {
     enemy.dead = true;
-    player.setVelocityX(80);
+    player.setVelocityX(120);
     enemy.play(hit, false);
     setTimeout(() => {
       enemy.disableBody(true, true);
+      upScore(80);
     }, 120);
   }
 };
 
 const getCircuit = (player, circuit) => {
   circuit.disableBody(true, true);
-
-  score += 10;
-  scoreText.setText("Score: " + score);
+  upScore(50);
 };
 
 class MyGame extends Phaser.Scene {
@@ -87,7 +95,7 @@ class MyGame extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true);
     this.cameras.main.setZoom(1.8);
 
-    this.nav = this.physics.add.sprite(500, 300, "nav");
+    this.nav = this.physics.add.sprite(3150, 350, "nav");
     this.nav.setImmovable(true);
     this.physics.add.collider(this.nav, level);
     this.nav.dead = false;
@@ -104,15 +112,32 @@ class MyGame extends Phaser.Scene {
     this.nre2.dead = false;
 
     // Getables
-    scoreText = this.add.text(250, 12, "Score: 0", {
-      fontSize: "12px",
-      fill: "#000",
-    });
-
     this.circuit = this.physics.add.image(40, 300, "circuit");
     this.circuit.setImmovable(true);
     this.physics.add.collider(this.circuit, level);
     this.physics.add.overlap(this.player, this.circuit, getCircuit, null, this);
+
+    this.circuit2 = this.physics.add.image(2335, 10, "circuit");
+    this.circuit2.setImmovable(true);
+    this.physics.add.collider(this.circuit2, level);
+    this.physics.add.overlap(
+      this.player,
+      this.circuit2,
+      getCircuit,
+      null,
+      this
+    );
+
+    this.circuit3 = this.physics.add.image(1250, 350, "circuit");
+    this.circuit3.setImmovable(true);
+    this.physics.add.collider(this.circuit3, level);
+    this.physics.add.overlap(
+      this.player,
+      this.circuit3,
+      getCircuit,
+      null,
+      this
+    );
 
     // Animations
     this.anims.create({
