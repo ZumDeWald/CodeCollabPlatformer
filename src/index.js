@@ -10,6 +10,37 @@ import NreAtlas from "./assets/nre.json";
 import Circuit from "./assets/circuit.png";
 import DeepNav from "./assets/DeepNav.mp3";
 
+const upArrow = document.getElementById("up");
+const leftArrow = document.getElementById("left");
+const rightArrow = document.getElementById("right");
+let buttonUp = false;
+let buttonLeft = false;
+let buttonRight = false;
+
+upArrow.addEventListener("touchstart", () => {
+  buttonUp = true;
+});
+
+upArrow.addEventListener("touchend", () => {
+  buttonUp = false;
+});
+
+leftArrow.addEventListener("touchstart", () => {
+  buttonLeft = true;
+});
+
+leftArrow.addEventListener("touchend", () => {
+  buttonLeft = false;
+});
+
+rightArrow.addEventListener("touchstart", () => {
+  buttonRight = true;
+});
+
+rightArrow.addEventListener("touchend", () => {
+  buttonRight = false;
+});
+
 const scoreBox = document.getElementById("score-box");
 let score = 0;
 
@@ -69,8 +100,8 @@ class MyGame extends Phaser.Scene {
     // World
     const world = this.make.tilemap({ key: "world" });
     const tileSet = world.addTilesetImage("world", "tileSet");
-    world.createStaticLayer("background", tileSet, 0, 0);
-    const level = world.createStaticLayer("level1", tileSet, 0, 0);
+    world.createLayer("background", tileSet, 0, 0);
+    const level = world.createLayer("level1", tileSet, 0, 0);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.physics.world.setBounds(0, 0, 7168, 400);
@@ -224,13 +255,13 @@ class MyGame extends Phaser.Scene {
   }
 
   update() {
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || buttonLeft === true) {
       this.player.setVelocityX(-175);
       this.player.setFlipX(true);
       if (this.player.body.onFloor()) {
         this.player.play("walk", true);
       }
-    } else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown || buttonRight === true) {
       this.player.setVelocityX(175);
       this.player.setFlipX(false);
       if (this.player.body.onFloor()) {
@@ -241,7 +272,10 @@ class MyGame extends Phaser.Scene {
       if (this.player.body.onFloor()) this.player.play("idle", true);
     }
 
-    if (this.cursors.up.isDown && this.player.body.onFloor()) {
+    if (
+      (this.cursors.up.isDown && this.player.body.onFloor()) ||
+      (buttonUp === true && this.player.body.onFloor())
+    ) {
       this.player.setVelocityY(-320);
       this.player.play("jump", true);
     }
@@ -253,8 +287,8 @@ class MyGame extends Phaser.Scene {
 }
 
 const config = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
+  type: Phaser.CANVAS,
+  canvas: document.getElementById("game-canvas"),
   width: 600,
   height: 400,
   pixelArt: true,
